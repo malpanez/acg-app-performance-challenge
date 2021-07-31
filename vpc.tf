@@ -1,0 +1,19 @@
+# Available AZs
+data "aws_availability_zones" "available" {}
+
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+  name   = "ACG-vpc"
+  cidr   = "10.0.0.0/16"
+
+  azs            = data.aws_availability_zones.available.names
+  public_subnets = ["10.0.0.0/24"]
+  # elasticache_subnets = ["10.0.5.0/24", "10.0.6.0/24"]
+
+
+  enable_dns_support                     = true
+  enable_dns_hostnames                   = true
+  create_database_subnet_group           = true
+  create_database_subnet_route_table     = true
+  create_database_internet_gateway_route = true
+}
